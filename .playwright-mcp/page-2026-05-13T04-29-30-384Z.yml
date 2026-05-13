@@ -1,0 +1,91 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - navigation [ref=e4]:
+      - link "ADHOLIC" [ref=e5] [cursor=pointer]:
+        - /url: "#"
+        - img [ref=e6]
+        - generic [ref=e9]: ADHOLIC
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - link "功能" [ref=e12] [cursor=pointer]:
+            - /url: "#features"
+        - listitem [ref=e13]:
+          - link "案例" [ref=e14] [cursor=pointer]:
+            - /url: "#showcase"
+        - listitem [ref=e15]:
+          - link "定價" [ref=e16] [cursor=pointer]:
+            - /url: "#cta"
+      - link "開始使用" [ref=e17] [cursor=pointer]:
+        - /url: "#cta"
+    - generic [ref=e18]:
+      - generic:
+        - generic: AI 驅動 · 一句話建站
+        - paragraph: 從描述到上線只要幾分鐘。AI 幫你寫文案、配色、選版型、加動畫，你只要點下發佈。
+        - generic:
+          - link "免費開始":
+            - /url: "#cta"
+            - text: 免費開始
+            - img
+          - link "看看能做什麼":
+            - /url: "#features"
+        - paragraph: 提示：將滑鼠移到文字上，粒子會排斥逃開 ✦
+    - generic [ref=e29]: ai-studio.app/preview
+    - generic [ref=e45]:
+      - generic [ref=e46]:
+        - paragraph [ref=e47]: Features
+        - heading "建站該有的，都已內建" [level=2] [ref=e48]
+        - paragraph [ref=e49]: 不是模板拼貼，是真正為你的品牌量身設計的網站。
+      - generic [ref=e50]:
+        - generic [ref=e53]:
+          - generic [ref=e54]: 全球 CDN
+          - heading "你的網站， 飛向全世界" [level=3] [ref=e55]:
+            - text: 你的網站，
+            - text: 飛向全世界
+          - paragraph [ref=e56]: 自動部署到全球 40+ 個邊緣節點。無論訪客身在台北、東京還是倫敦，首頁載入都在 200 ms 以內。
+          - list [ref=e57]:
+            - listitem [ref=e58]: 40+ 全球邊緣節點
+            - listitem [ref=e60]: 自動 SSL / TLS 憑證
+            - listitem [ref=e62]: DDoS 防護內建
+            - listitem [ref=e64]: 99.99 % uptime SLA
+        - generic [ref=e70]:
+          - generic [ref=e71] [cursor=pointer]:
+            - img [ref=e73]
+            - heading "一句話生成" [level=3] [ref=e76]
+            - paragraph [ref=e77]: 描述你的品牌，AI 自動草擬整站結構與文案。
+          - generic [ref=e78] [cursor=pointer]:
+            - img [ref=e80]
+            - heading "智慧配色" [level=3] [ref=e86]
+            - paragraph [ref=e87]: 依產業、情緒、目標自動產生符合品牌的色彩系統。
+          - generic [ref=e88] [cursor=pointer]:
+            - img [ref=e90]
+            - heading "67 種版型" [level=3] [ref=e94]
+            - paragraph [ref=e95]: 從極簡到 brutalism，挑一個風格就能直接套用。
+          - generic [ref=e96] [cursor=pointer]:
+            - img [ref=e98]
+            - heading "效能優先" [level=3] [ref=e101]
+            - paragraph [ref=e102]: 預設 lazy load、image optim、預先取得字型。
+          - generic [ref=e103] [cursor=pointer]:
+            - img [ref=e105]
+            - heading "可導出原始碼" [level=3] [ref=e109]
+            - paragraph [ref=e110]: Next.js + Tailwind 乾淨原始碼，隨時自行二次開發。
+          - generic [ref=e111] [cursor=pointer]:
+            - img [ref=e113]
+            - heading "一鍵發佈" [level=3] [ref=e116]
+            - paragraph [ref=e117]: 綁定自訂網域、自動 SSL，幾秒完成上線。
+    - generic [ref=e120]:
+      - heading "準備好讓 AI 替你建站了嗎？" [level=2] [ref=e121]
+      - paragraph [ref=e122]: 免費試用，無需信用卡。三十秒看到你網站的雛型。
+      - link "立即開始建站" [ref=e123] [cursor=pointer]:
+        - /url: "#"
+        - text: 立即開始建站
+        - img [ref=e124]
+    - generic [ref=e127]:
+      - paragraph [ref=e128]: © 2026 ADHOLIC. All rights reserved.
+      - generic [ref=e129]:
+        - link "Privacy" [ref=e130] [cursor=pointer]:
+          - /url: "#"
+        - link "Terms" [ref=e131] [cursor=pointer]:
+          - /url: "#"
+        - link "Contact" [ref=e132] [cursor=pointer]:
+          - /url: "#"
+  - alert [ref=e133]

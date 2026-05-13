@@ -1,0 +1,106 @@
+
+> ai-studio@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 762ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.1s (1367 modules)
+ GET / 200 in 2252ms
+ ✓ Compiled in 128ms (668 modules)
+ GET / 200 in 39ms
+ ✓ Compiled /_not-found in 350ms (1338 modules)
+ GET /robots.txt 404 in 443ms
+ ✓ Compiled /favicon.ico in 230ms (714 modules)
+ GET /favicon.ico 200 in 296ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 103ms
+ GET /_next/static/chunks/app/LayoutGroupContext.mjs.map 404 in 58ms
+ ✓ Compiled in 137ms (668 modules)
+ ✓ Compiled in 100ms (668 modules)
+ ✓ Compiled in 358ms (1351 modules)
+ ✓ Compiled in 194ms (1351 modules)
+ ✓ Compiled in 262ms (1351 modules)
+ ✓ Compiled in 157ms (1351 modules)
+ GET / 200 in 77ms
+ GET / 200 in 36ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 745ms (1340 modules)
+ GET /robots.txt 404 in 850ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 77ms
+ GET /_next/static/chunks/app/LayoutGroupContext.mjs.map 404 in 85ms
+ GET / 200 in 72ms
+ GET /robots.txt 404 in 29ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 13ms
+ GET /_next/static/chunks/app/LayoutGroupContext.mjs.map 404 in 13ms
+ ✓ Compiled /favicon.ico in 104ms (715 modules)
+ GET /favicon.ico 200 in 158ms
+ ✓ Compiled in 271ms (1351 modules)
+ ✓ Compiled in 259ms (1351 modules)
+ ✓ Compiled in 165ms (1351 modules)
+ GET / 200 in 91ms
+ GET / 200 in 52ms
+ ✓ Compiled /_not-found in 295ms (1340 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 313ms
+ GET /robots.txt 404 in 407ms
+ GET /_next/static/chunks/app/LayoutGroupContext.mjs.map 404 in 11ms
+ ✓ Compiled /favicon.ico in 136ms (715 modules)
+ GET /favicon.ico 200 in 186ms
+ GET / 200 in 130ms
+ GET /robots.txt 404 in 33ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 12ms
+ GET /_next/static/chunks/app/LayoutGroupContext.mjs.map 404 in 14ms
+ GET / 200 in 51ms
+ GET /robots.txt 404 in 39ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 17ms
+ GET /_next/static/chunks/app/LayoutGroupContext.mjs.map 404 in 11ms
+ GET /favicon.ico 200 in 12ms
+ ✓ Compiled in 457ms (1351 modules)
+ ✓ Compiled in 196ms (1351 modules)
+ ✓ Compiled in 162ms (1351 modules)
+ GET / 200 in 101ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: EPERM: operation not permitted, rename 'D:\VScode\AI製作官網\.next\cache\webpack\client-development\1.pack.gz_' -> 'D:\VScode\AI製作官網\.next\cache\webpack\client-development\1.pack.gz'
+ ✓ Compiled in 306ms (1351 modules)
+ ✓ Compiled in 195ms (669 modules)
+ ✓ Compiled in 1120ms (1351 modules)
+ ✓ Compiled in 345ms (1351 modules)
+ ✓ Compiled in 248ms (1351 modules)
+ GET / 200 in 134ms
+ ✓ Compiled in 660ms (1351 modules)
+ ✓ Compiled in 171ms (1351 modules)
+ ✓ Compiled in 173ms (1351 modules)
+ ✓ Compiled in 160ms (1351 modules)
+ ✓ Compiled in 170ms (1351 modules)
+ GET / 200 in 104ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: EPERM: operation not permitted, rename 'D:\VScode\AI製作官網\.next\cache\webpack\server-development\0.pack.gz_' -> 'D:\VScode\AI製作官網\.next\cache\webpack\server-development\0.pack.gz'
+ ✓ Compiled in 672ms (1351 modules)
+ ✓ Compiled in 169ms (1351 modules)
+ ✓ Compiled in 153ms (1351 modules)
+ ✓ Compiled in 147ms (1351 modules)
+ ✓ Compiled in 304ms (1351 modules)
+ ✓ Compiled in 265ms (1351 modules)
+ ✓ Compiled in 295ms (1351 modules)
+ GET / 200 in 105ms
+ ✓ Compiled in 649ms (1351 modules)
+ ✓ Compiled in 2.5s (1351 modules)
+ ✓ Compiled in 249ms (1351 modules)
+ ✓ Compiled in 161ms (1351 modules)
+ ✓ Compiled in 219ms (1351 modules)
+ ✓ Compiled in 201ms (1351 modules)
+ ✓ Compiled in 231ms (1351 modules)
+ ✓ Compiled in 423ms (1351 modules)
+ ✓ Compiled in 281ms (1351 modules)
+ ✓ Compiled in 230ms (1351 modules)
+ ✓ Compiled in 177ms (1351 modules)
+ ✓ Compiled in 235ms (1351 modules)
+ ✓ Compiled in 202ms (1351 modules)
+ ✓ Compiled in 201ms (1351 modules)
+ ✓ Compiled in 363ms (1351 modules)
+ ✓ Compiled in 286ms (1351 modules)
+ ✓ Compiled in 245ms (1351 modules)
+ ✓ Compiled in 126ms (1351 modules)
+ ✓ Compiled in 195ms (1351 modules)
+ ✓ Compiled in 252ms (1351 modules)
+[?25h
