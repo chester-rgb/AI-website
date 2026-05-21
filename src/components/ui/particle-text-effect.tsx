@@ -15,16 +15,16 @@ class Particle {
   homeTarget: Vector2D = { x: 0, y: 0 };
   scatterTarget: Vector2D = { x: 0, y: 0 };
 
-  closeEnoughTarget = 100;
-  maxSpeed = 1.0;
-  maxForce = 0.1;
-  particleSize = 10;
+  closeEnoughTarget = 150; // 接近目標時的減速半徑（越大越早減速）
+  maxSpeed = 1.0; // 粒子最高速度
+  maxForce = 0.2; // 轉向力上限（越大轉向越靈敏）
+  particleSize = 10; // 僅在 drawAsPoints = false 時生效
   isKilled = false;
 
   startColor = { r: 0, g: 0, b: 0 };
   targetColor = { r: 0, g: 0, b: 0 };
   colorWeight = 0;
-  colorBlendRate = 0.01;
+  colorBlendRate = 0.01; // 顏色過渡速度（每幀 0~1）
 
   move() {
     let proximityMult = 1;
@@ -70,7 +70,7 @@ class Particle {
     };
     ctx.fillStyle = `rgb(${c.r}, ${c.g}, ${c.b})`;
     if (drawAsPoints) {
-      ctx.fillRect(this.pos.x, this.pos.y, 2, 2);
+      ctx.fillRect(this.pos.x, this.pos.y, 3, 3); // 點模式像素大小（目前 3x3）
     } else {
       ctx.beginPath();
       ctx.arc(this.pos.x, this.pos.y, this.particleSize / 2, 0, Math.PI * 2);
@@ -94,9 +94,9 @@ class Particle {
   }
 }
 
-// Internal canvas resolution cap — keeps particle count manageable on big screens
-const MAX_CANVAS_W = 1920;
-const MAX_CANVAS_H = 960;
+// Canvas 解析度上限，避免大螢幕時粒子數過高
+const MAX_CANVAS_W = 1920; // 寬度上限
+const MAX_CANVAS_H = 960; // 高度上限
 
 function randomOffscreenPos(cx: number, cy: number, mag: number): Vector2D {
   const angle = Math.random() * Math.PI * 2;
@@ -105,16 +105,16 @@ function randomOffscreenPos(cx: number, cy: number, mag: number): Vector2D {
 
 interface ParticleTextEffectProps {
   words?: string[];
-  /** ms between auto word changes; ignored when words.length === 1 */
+  /** 自動切換文字間隔（毫秒），words 只有 1 個時不生效 */
   cycleMs?: number;
-  /** palette to pick target colors from (hex). If omitted random rainbow. */
+  /** 粒子目標色盤（hex），未提供時會使用隨機顏色 */
   palette?: string[];
   className?: string;
-  /** Canvas backdrop. Default black; use "transparent" to overlay onto page bg. */
+  /** 畫布背景色；傳入 "transparent" 可透出頁面背景 */
   background?: string;
 }
 
-const DEFAULT_WORDS = ["ADHOLIC"];
+const DEFAULT_WORDS = ["ADHOLIC"]; // 預設粒子要排成的文字
 
 function hexToRgb(hex: string) {
   const h = hex.replace("#", "");
@@ -127,10 +127,10 @@ function hexToRgb(hex: string) {
 
 export function ParticleTextEffect({
   words = DEFAULT_WORDS,
-  cycleMs = 4000,
+  cycleMs = 4000, // 文字自動切換間隔（毫秒）
   palette,
   className,
-  background = "#000000",
+  background = "#ffffff", // 外層容器背景色
 }: ParticleTextEffectProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -140,8 +140,9 @@ export function ParticleTextEffect({
   const wordIndexRef = useRef(0);
   const mouseRef = useRef({ x: -9999, y: -9999 });
 
-  const pixelSteps = 10;
-  const drawAsPoints = true;
+  const desktopPixelSteps = 10; // 桌機取樣步距（越小越密、越大越疏）
+  const mobilePixelSteps = 7; // 手機取樣步距，讓文字粒子更飽滿
+  const drawAsPoints = false; // true: 方形點；false: 圓形粒子（使用 particleSize）
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -160,8 +161,15 @@ export function ParticleTextEffect({
       off.height = canvas.height;
       const octx = off.getContext("2d")!;
       octx.fillStyle = "white";
-      const fontSize = Math.floor(Math.min(canvas.width / (word.length * 0.62), canvas.height * 0.7) * 0.5);
-      octx.font = `900 ${fontSize}px Outfit, Arial, sans-serif`;
+      // 文字光柵化設定會決定粒子的形狀與比例
+      const isMobile = canvas.width < 768;
+      const scaleFactor = isMobile ? 0.7 : 0.5;
+      const minFontSize = isMobile ? 72 : 48;
+      const fontSize = Math.max(
+        minFontSize,
+        Math.floor(Math.min(canvas.width / (word.length * 0.62), canvas.height * 0.7) * scaleFactor)
+      );
+      octx.font = `900 ${fontSize}px Outfit, Arial, sans-serif`; // 文字輪廓使用的字重與字體
       octx.textAlign = "center";
       octx.textBaseline = "middle";
       octx.fillText(word, canvas.width / 2, canvas.height / 2);
@@ -170,9 +178,10 @@ export function ParticleTextEffect({
       const newColor = pickColor();
       const particles = particlesRef.current;
       let pi = 0;
+      const pixelSteps = canvas.width < 768 ? mobilePixelSteps : desktopPixelSteps;
 
       const idxs: number[] = [];
-      for (let i = 0; i < pixels.length; i += pixelSteps * 4) idxs.push(i);
+      for (let i = 0; i < pixels.length; i += pixelSteps * 3) idxs.push(i);
       for (let i = idxs.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [idxs[i], idxs[j]] = [idxs[j], idxs[i]];
@@ -187,8 +196,8 @@ export function ParticleTextEffect({
           if (pi < particles.length) {
             p = particles[pi];
             p.isKilled = false;
-            // If particle has already arrived at its previous target (colorWeight ~1),
-            // re-launch it from offscreen so we always get a visible fly-in.
+            // 若粒子已抵達上一個目標（colorWeight 接近 1），
+            // 重新從畫面外飛入，確保切字時有明顯進場效果。
             if (p.colorWeight >= 0.999) {
               const rp = randomOffscreenPos(canvas.width / 2, canvas.height / 2, (canvas.width + canvas.height) / 2);
               p.pos.x = rp.x;
@@ -202,10 +211,10 @@ export function ParticleTextEffect({
             const rp = randomOffscreenPos(canvas.width / 2, canvas.height / 2, (canvas.width + canvas.height) / 2);
             p.pos.x = rp.x;
             p.pos.y = rp.y;
-            p.maxSpeed = Math.random() * 6 + 4;
-            p.maxForce = p.maxSpeed * 0.04;
-            p.particleSize = Math.random() * 6 + 6;
-            p.colorBlendRate = Math.random() * 0.05 + 0.03;
+            p.maxSpeed = Math.random() * 6 + 10; // 初始速度範圍：10~16
+            p.maxForce = p.maxSpeed * 0.04; // 轉向力與速度成比例
+            p.particleSize = Math.random() * 3 + 1; // 圓形大小範圍：6~12
+            p.colorBlendRate = Math.random() * 0.05 + 0.03; // 顏色過渡範圍：0.03~0.08
             particles.push(p);
           }
 
@@ -220,7 +229,7 @@ export function ParticleTextEffect({
           p.target.y = y;
           p.homeTarget.x = x;
           p.homeTarget.y = y;
-          // Pre-compute each particle's unique escape direction for scatter
+          // 預先計算每顆粒子的散開方向
           const sp = randomOffscreenPos(canvas.width / 2, canvas.height / 2, (canvas.width + canvas.height) / 1.5);
           p.scatterTarget.x = sp.x;
           p.scatterTarget.y = sp.y;
@@ -236,27 +245,27 @@ export function ParticleTextEffect({
       if (background === "transparent") {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       } else {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.1)"; // 拖影覆蓋色與透明度（alpha 越大拖影越少）
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
 
-      // Scroll-linked scatter: 0 = home (text), 1 = fully scattered
+      // 捲動連動散開：0 = 文字定位，1 = 完全散開
       const wrapRect = wrap.getBoundingClientRect();
-      const scrollRatio = Math.max(0, Math.min(1, -wrapRect.top / (wrapRect.height * 0.6)));
+      const scrollRatio = Math.max(0, Math.min(1, -wrapRect.top / (wrapRect.height * 0.6))); // 捲動靈敏度係數
 
       const particles = particlesRef.current;
       const { x: mx, y: my } = mouseRef.current;
-      const repelRadius = 100;
-      const repelStrength = 2;
+      const repelRadius = 100; // 滑鼠排斥半徑
+      const repelStrength = 2; // 滑鼠排斥力度
 
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
 
-        // Lerp between homeTarget and scatterTarget based on scroll progress
+        // 依捲動進度在 homeTarget 與 scatterTarget 之間插值
         p.target.x = p.homeTarget.x + (p.scatterTarget.x - p.homeTarget.x) * scrollRatio;
         p.target.y = p.homeTarget.y + (p.scatterTarget.y - p.homeTarget.y) * scrollRatio;
 
-        // Repel from mouse
+        // 受滑鼠排斥
         const dx = p.pos.x - mx;
         const dy = p.pos.y - my;
         const d = Math.sqrt(dx * dx + dy * dy);
@@ -295,7 +304,7 @@ export function ParticleTextEffect({
     };
 
     sizeCanvas();
-    // Ensure particles exist after a strict-mode remount where canvas size is unchanged
+    // React StrictMode 重掛載且尺寸不變時，確保粒子會重新建立
     if (particlesRef.current.length === 0) {
       renderWord(words[0]);
     }
@@ -324,7 +333,7 @@ export function ParticleTextEffect({
       ro.disconnect();
       canvas.removeEventListener("mousemove", onMove);
       canvas.removeEventListener("mouseleave", onLeave);
-      // Reset state so StrictMode double-mount in dev restarts the fly-in.
+      // 重置狀態，讓開發模式 StrictMode 雙掛載時可重播飛入效果。
       particlesRef.current = [];
       frameCountRef.current = 0;
       wordIndexRef.current = 0;

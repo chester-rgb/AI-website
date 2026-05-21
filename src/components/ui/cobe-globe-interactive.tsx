@@ -150,8 +150,6 @@ export function GlobeInteractive({
           onClick={() => setExpanded(expanded === m.id ? null : m.id)}
           style={{
             position: "absolute",
-            // @ts-ignore CSS Anchor Positioning
-            positionAnchor: `--cobe-${m.id}`,
             bottom: "anchor(top)",
             left: "anchor(center)",
             translate: "-50% 0",

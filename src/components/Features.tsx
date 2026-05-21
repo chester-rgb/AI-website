@@ -68,7 +68,7 @@ function GlobeCard() {
         style={{ background: "radial-gradient(circle, #00506e 0%, transparent 70%)" }}
       />
 
-      <div className="grid items-center gap-0 md:grid-cols-2">
+      <div className="grid items-center gap-0 grid-cols-1 md:grid-cols-[4fr_6fr]">
         {/* Text side */}
         <div className="relative z-10 px-10 py-14 md:px-14">
           <span className="inline-block rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-primary">
