@@ -2,7 +2,7 @@ import { Nav } from "@/components/Nav";
 import { Hero } from "@/components/Hero";
 import { Features } from "@/components/Features";
 import { Showcase } from "@/components/Showcase";
-import { CTA, Footer, CoffeeBeansCard } from "@/components/CTA";
+import { CTA, Footer } from "@/components/CTA";
 
 export default function Home() {
   return (
