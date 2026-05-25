@@ -11,7 +11,7 @@ export default function Home() {
       <Hero />
       <Showcase />
       <Features />
-      <CoffeeBeansCard />
+      {/* <CoffeeBeansCard /> */}
       <CTA />
       <Footer />
     </main>
