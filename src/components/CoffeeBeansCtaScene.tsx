@@ -8,6 +8,7 @@ import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
 type ControlState = {
   count: number;
+  quality: number;
   flow: number;
   burst: number;
   swirl: number;
@@ -22,12 +23,20 @@ const MOUSE_REPEL_MULTIPLIER = 5;
 const FLOW_TARGET_RADIUS = 2.2;
 const FLOW_RETURN_STRENGTH = 9;
 const PUBLIC_BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
+const DEFAULT_QUALITY = 1;
 
 const clampDelta = (delta: number) => Math.min(delta, 0.033);
+const getTargetPixelRatio = (quality: number) => {
+  const qualityClamped = Math.max(1, Math.min(10, quality));
+  const ratioCap = 0.5 + qualityClamped * 0.15;
+  return Math.min(window.devicePixelRatio, ratioCap);
+};
 
 export function CoffeeBeansCtaScene() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const qualityRef = useRef(DEFAULT_QUALITY);
   const controlRef = useRef({
     activeCount: 600,
     flowMult: 1 / 4,
@@ -42,6 +51,7 @@ export function CoffeeBeansCtaScene() {
   const [debug, setDebug] = useState("loading...");
   const [controls, setControls] = useState<ControlState>({
     count: 600,
+    quality: DEFAULT_QUALITY,
     flow: 1,
     burst: 1,
     swirl: 1,
@@ -61,6 +71,16 @@ export function CoffeeBeansCtaScene() {
   }, [controls]);
 
   useEffect(() => {
+    if (!rendererRef.current || !wrapRef.current) return;
+
+    qualityRef.current = controls.quality;
+    const renderer = rendererRef.current;
+    renderer.setPixelRatio(getTargetPixelRatio(controls.quality));
+    const rect = wrapRef.current.getBoundingClientRect();
+    renderer.setSize(Math.max(rect.width, 1), Math.max(rect.height, 1), false);
+  }, [controls.quality]);
+
+  useEffect(() => {
     if (!wrapRef.current) return;
 
     const wrap = wrapRef.current;
@@ -73,7 +93,8 @@ export function CoffeeBeansCtaScene() {
     camera.lookAt(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    rendererRef.current = renderer;
+    renderer.setPixelRatio(getTargetPixelRatio(qualityRef.current));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.0;
@@ -124,6 +145,7 @@ export function CoffeeBeansCtaScene() {
     let rafId = 0;
     let disposed = false;
     let hasPrevMouse = false;
+    let fpsAverage = 60;
 
     const spawnPosition = () => {
       const spread = (Math.random() - 0.5) * 6;
@@ -204,6 +226,8 @@ export function CoffeeBeansCtaScene() {
       const { activeCount, flowMult, burstMult, swirlMult, forceMult, lightMult } = controlRef.current;
       const dt = clampDelta(clock.getDelta());
       frameCount += 1;
+      const instantFps = 1 / Math.max(dt, 0.0001);
+      fpsAverage = fpsAverage * 0.9 + instantFps * 0.1;
       mouseVelocity.multiplyScalar(0.88);
 
       lightTarget.lerp(mouseWorld, 0.15);
@@ -299,7 +323,11 @@ export function CoffeeBeansCtaScene() {
       renderer.render(scene, camera);
 
       if (frameCount % 30 === 0) {
-        setDebug(`mode: single geo | instances: ${activeCount}/${MAX_COUNT} | env: HDRI on`);
+        const renderInfo = renderer.info.render;
+        const memoryInfo = renderer.info.memory;
+        setDebug(
+          `FPS: ${Math.round(fpsAverage)} | Q: ${qualityRef.current}/10 | Draw: ${renderInfo.calls} | Tri: ${renderInfo.triangles.toLocaleString()} | Geo: ${memoryInfo.geometries} | Tex: ${memoryInfo.textures} | Beans: ${activeCount}/${MAX_COUNT}`,
+        );
       }
 
       rafId = window.requestAnimationFrame(animate);
@@ -403,6 +431,7 @@ export function CoffeeBeansCtaScene() {
       scene.remove(keyLight);
       scene.remove(mouseLight);
       renderer.dispose();
+      rendererRef.current = null;
 
       if (renderer.domElement.parentNode === wrap) {
         wrap.removeChild(renderer.domElement);
@@ -435,6 +464,7 @@ export function CoffeeBeansCtaScene() {
 
       <div className="absolute bottom-4 left-1/2 z-[5] flex w-[calc(100%-1.5rem)] -translate-x-1/2 flex-wrap items-center justify-center gap-2 rounded-full border border-white/15 bg-black/45 px-3 py-2 text-[11px] text-[#f5e6d3] backdrop-blur md:w-auto md:gap-3 md:px-4 md:text-xs">
         <Control label="豆數" id="count" min={60} max={600} value={controls.count} onChange={(value) => setControls((prev) => ({ ...prev, count: value }))} />
+        <Control label="畫質" id="quality" min={1} max={10} value={controls.quality} onChange={(value) => setControls((prev) => ({ ...prev, quality: value }))} />
         <Control label="流速" id="flow" min={0} max={10} value={controls.flow} onChange={(value) => setControls((prev) => ({ ...prev, flow: value }))} />
         <Control label="爆發" id="burst" min={0} max={10} value={controls.burst} onChange={(value) => setControls((prev) => ({ ...prev, burst: value }))} />
         <Control label="旋轉" id="swirl" min={0} max={10} value={controls.swirl} onChange={(value) => setControls((prev) => ({ ...prev, swirl: value }))} />
